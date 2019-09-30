@@ -334,7 +334,7 @@ impl RlpStream {
 	}
 
 	/// Finalize current unbounded list. Panics if no unbounded list has been opened.
-	pub fn complete_unbounded_list(&mut self) {
+	pub fn finalize_unbounded_list(&mut self) {
 		let list = self.unfinished_lists.pop().expect("No open list.");
 		if list.max.is_some() {
 			panic!("List type mismatch.");
@@ -343,6 +343,12 @@ impl RlpStream {
 		self.encoder().insert_list_payload(len, list.position);
 		self.note_appended(1);
 		self.finished_list = true;
+	}
+}
+
+	/// Deprecated, use finalize_unbounded_list instead.
+	pub fn complete_unbounded_list(&mut self) {
+		finalize_unbounded_list(self);
 	}
 }
 
